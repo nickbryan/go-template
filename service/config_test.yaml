@@ -1,0 +1,7 @@
+server:
+  # times for timeouts are in seconds
+  write_timeout: 15
+  read_timeout: 15
+  idle_timeout: 15
+  shutdown_timeout: 15
+  address: "0.0.0.0:9090"

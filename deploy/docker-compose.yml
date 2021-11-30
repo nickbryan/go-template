@@ -1,0 +1,39 @@
+version: "3.8"
+services:
+  gotemplate:
+    container_name: gotemplate
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - 9091:9090
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./../service:/app
+    environment:
+      - APP_ENV=local
+      - APP_PATH=/app
+      - DATABASE_URL=postgres://gotemplate:secret@gotemplatedb:5432/gotemplate?sslmode=disable
+
+  postgres:
+    container_name: gotemplatedb
+    image: postgres:13
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=gotemplate
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=gotemplate
+    volumes:
+      - ./database/:/var/lib/postgresql/data/
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U gotemplate" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  database:

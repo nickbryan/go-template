@@ -1,0 +1,5 @@
+.vscode
+.env
+/service/vendor
+/service/tmp
+/deploy/database
